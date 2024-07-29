@@ -6,12 +6,11 @@ const express = require("express");
 // create LINE SDK config from env variables
 const config = {
   channelSecret: process.env.CHANNEL_SECRET,
+  channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN
 };
 
 // create LINE SDK client
-const client = new line.messagingApi.MessagingApiClient({
-  channelAccessToken: process.env.CHANNEL_ACCESS_TOKEN,
-});
+const client = new line.messagingApi.MessagingApiClient(config);
 
 // create Express app
 // about Express itself: https://expressjs.com/
@@ -19,7 +18,7 @@ const app = express();
 
 // register a webhook handler with middleware
 // about the middleware, please refer to doc
-app.post("/callback", line.middleware(config), (req, res) => {
+app.post("https://yuo906.github.io/linebot/callback", line.middleware(config), (req, res) => {
   Promise.all(req.body.events.map(handleEvent))
     .then((result) => res.json(result))
     .catch((err) => {
